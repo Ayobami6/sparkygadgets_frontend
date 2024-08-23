@@ -29,14 +29,38 @@ const AskAI = (props: Props) => {
     return (
         <div className='flex flex-col min-h-screen'>
             <Banner bannerText={bannerText} loading={bannerLoading} />
-            <div className='p-4'>
+            <div className='p-[102px]'>
+                <div className='border-2 rounded-lg p-11 bg-gray-200 border-gray-100'>
+                    <div className="chat chat-start">
+                        <div className="chat-bubble">
+                            <div className="chat-header">
+                                You
+                            </div>
+                            It over Anakin,
+                            <br />
+                            I have the high ground.
+                        </div>
+                    </div>
+                    <div className="chat chat-end">
+                        <div className="chat-header">
+                            AI
+                        </div>
+                        <div className="chat-bubble">You underestimate my power!</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div className='flex justify-center items-center mt-auto'>
                 <h1>
-                    Hello
+                    Chat Stuff
                 </h1>
 
             </div>
 
-            
+
 
 
             <div className='mt-auto'>
