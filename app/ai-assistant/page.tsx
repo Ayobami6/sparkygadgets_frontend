@@ -23,7 +23,6 @@ const AskAI = (props: Props) => {
     const [question, setQuestion] = useState("");
     const [loading, setLoading] = useState(false);
     const [conversations, setConversations] = useState<Conversation[]>([]);
-    // const conversations: Conversation[]  = [];
     const bannerFetch = async () => {
         try {
             setBannerLoading(true);
@@ -56,8 +55,6 @@ const AskAI = (props: Props) => {
             alert("Please enter a question before submitting");
             return;
         }
-        // TODO: Send question to AI model and display response
-        console.log(question);
         conversations.push({role: "user", message: question});
         setConversations(conversations)
         setQuestion("")
