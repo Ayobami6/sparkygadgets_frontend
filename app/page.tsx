@@ -12,15 +12,28 @@ import { fetchAdvert } from "@/api/advert";
 import { fetchProducts, searchProduct } from "@/api/products"
 import Link from "next/link";
 import { AiFillWechat } from "react-icons/ai";
+import fetchBrands from "@/api/brands";
+import Loading from "@/components/Loading";
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 export default function Home() {
   const [bannerText, setBannerText] = useState("");
   const [advertData, setAdvertData] = useState([]);
-  const categories = ["Men's Clothing", "Women's Clothing", "Slides", "Bags"];
+  const [topDeals, setTopDeals] = useState([]);
+  const [topDealsLoading, setTopDealsLoading] = useState(false);
   const [bannerLoading, setBannerLoading] = useState(false);
   const [advertLoading, setAdvertLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
   const [products, setProducts] = useState([])
+  const [brands, setBrands] = useState([]);
+  const [brandsLoading, setBrandsLoading] = useState(false);
   const catFilter = () => {
     // Filter logic goes here
     console.log("Filtering")
@@ -36,6 +49,22 @@ export default function Home() {
     } catch (error) {
       setBannerLoading(false);
       console.log(error);
+    }
+  }
+  const brandsFetch = async () => {
+    try {
+      setBrandsLoading(true);
+      const response = await fetchBrands();
+      if (response.status === "success") {
+        setBrandsLoading(false);
+        console.log(response.data);
+        setBrands(response?.data);
+      }
+
+    } catch (error) {
+      setBrandsLoading(false);
+      console.log(error);
+
     }
   }
   const productsFetch = async () => {
@@ -72,6 +101,7 @@ export default function Home() {
     bannerFetch();
     advertFetch();
     productsFetch();
+    brandsFetch();
   }, []);
   const handleSearch = async (value: string) => {
     console.log(value);
@@ -90,6 +120,12 @@ export default function Home() {
     }
     console.log("Searching")
   }
+  const [activeIndex, setActiveIndex] = useState(0);
+  const handleChangeBrand = (brandId: number, index: number) => {
+    setActiveIndex(index);
+    // fetch products based on brandId
+    console.log("Brand filter: ", brandId)
+  }
   return (
     <div>
       <Banner bannerText={bannerText} loading={bannerLoading} />
@@ -101,12 +137,66 @@ export default function Home() {
       <div className="flex justify-center font-Inter text-sm gap-5 p-4">
         <Link href={"/ai-assistant"}>
           <Button className="w-[120px] font-Poppins h-[40px] shadow-md text-[16px] text-white bg-other" type="button">
-            <AiFillWechat size={24}/>  Ask AI
+            <AiFillWechat size={24} />  Ask AI
           </Button>
         </Link>
 
       </div>
-      <PopularProduct products={products} loading={productsLoading} type="Popular Products" />
+      <PopularProduct products={products} loading={productsLoading} type="Top Deals" />
+
+      <div className="mt-5">
+        <h1 className="text-center font-bold text-2xl my-10">Brands</h1>
+        <div className="flex justify-center items-center">
+          <Carousel
+            opts={{
+              align: "start",
+            }}
+            className="w-full max-w-2xl" >
+            <CarouselContent>
+              {
+                brandsLoading ? (
+                  <div className='flex items-center justify-center'><Loading /> </div>
+                ) : brands && brands.length > 0 ? (
+                  <div className="flex">
+                    {
+                      brands.map((brand: any, index: number) => (
+                        <CarouselItem key={index} className="md:basis-1/8 lg:basis-1/8 basis-1/8 rounded-full">
+                          <div className="p-1">
+                            <Card className={`cursor-pointer ${activeIndex === index ? "hover:border-3 border-2 border-gray-500" : "hover:border-2"}`} onClick={() => handleChangeBrand(brand.id, index)}>
+                              <CardContent className="flex aspect-square items-center relative w-full h-full justify-center p-6">
+                                <Image src={`https://sparkygadgets.pythonanywhere.com/${brand?.logo}`} alt='logo' layout='fill' objectFit='cover' className="rounded-md" />
+                              </CardContent>
+                            </Card>
+                          </div>
+                        </CarouselItem>
+                      ))
+                    }
+                  </div>
+                ) : (
+                  <div className='flex items-center justify-center'>
+                    <h1>
+                      Brand list is empty
+                    </h1>
+
+                  </div>
+                )
+              }
+            </CarouselContent>
+            {
+              brands && brands.length > 5 && (
+                <>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </>
+              )
+
+            }
+            
+          </Carousel>
+
+        </div>
+
+      </div>
       <div className="my-4">
         <PopularProduct products={products} loading={productsLoading} type="Products" />
 
@@ -122,6 +212,6 @@ export default function Home() {
         </div>
       </div>
       <Footer />
-    </div>
+    </div >
   );
 }
