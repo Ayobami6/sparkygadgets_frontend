@@ -157,21 +157,19 @@ export default function Home() {
                 brandsLoading ? (
                   <div className='flex items-center justify-center'><Loading /> </div>
                 ) : brands && brands.length > 0 ? (
-                  <div className="flex">
-                    {
-                      brands.map((brand: any, index: number) => (
-                        <CarouselItem key={index} className="md:basis-1/8 lg:basis-1/8 basis-1/8 rounded-full">
-                          <div className="p-1">
-                            <Card className={`cursor-pointer ${activeIndex === index ? "hover:border-3 border-2 border-gray-500" : "hover:border-2"}`} onClick={() => handleChangeBrand(brand.id, index)}>
-                              <CardContent className="flex aspect-square items-center relative w-full h-full justify-center p-6">
-                                <Image src={`https://sparkygadgets.pythonanywhere.com/${brand?.logo}`} alt='logo' layout='fill' objectFit='cover' className="rounded-md" />
-                              </CardContent>
-                            </Card>
-                          </div>
-                        </CarouselItem>
-                      ))
-                    }
-                  </div>
+
+                  brands.map((brand: any, index: number) => (
+                    <CarouselItem key={index} className="md:basis-1/8 lg:basis-1/8 basis-1/8 rounded-full">
+                      <div className="p-1">
+                        <Card className={`cursor-pointer ${activeIndex === index ? "hover:border-3 border-2 border-gray-500" : "hover:border-2"}`} onClick={() => handleChangeBrand(brand.id, index)}>
+                          <CardContent className="flex aspect-square items-center relative w-full h-full justify-center p-6">
+                            <Image src={`https://sparkygadgets.pythonanywhere.com/${brand?.logo}`} alt='logo' layout='fill' objectFit='cover' className="rounded-md" />
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </CarouselItem>
+                  ))
+
                 ) : (
                   <div className='flex items-center justify-center'>
                     <h1>
@@ -191,7 +189,7 @@ export default function Home() {
               )
 
             }
-            
+
           </Carousel>
 
         </div>
