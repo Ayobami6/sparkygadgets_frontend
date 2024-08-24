@@ -45,3 +45,15 @@ export const filterByCategory = async (categoryId: number) => {
         throw error;   
     }
 }
+
+export const filterProduct = async (filterQuery: string) => {
+    try {
+        const response = await fetch(`${apiBaseUrl}${filterQuery}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+        
+    }
+}

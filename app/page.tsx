@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { fetchBanner } from "@/api/banner";
 import { fetchAdvert } from "@/api/advert";
-import { fetchProducts, searchProduct } from "@/api/products"
+import { fetchProducts, searchProduct, filterProduct } from "@/api/products"
 import Link from "next/link";
 import { AiFillWechat } from "react-icons/ai";
 import fetchBrands from "@/api/brands";
@@ -29,6 +29,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
+
 
 export default function Home() {
   const [bannerText, setBannerText] = useState("");
@@ -60,6 +61,18 @@ export default function Home() {
     }
     console.log("Filtering")
     console.log(filterQuery)
+    // filter product api request
+    setProductsLoading(true);
+    try {
+      const response = await filterProduct(filterQuery);
+      if (response.status === "success") {
+        setProductsLoading(false);
+        setProducts(response?.data);
+      }
+    } catch (error) {
+      setProductsLoading(false);
+      console.log(error);
+    }
   }
   const bannerFetch = async () => {
     try {
