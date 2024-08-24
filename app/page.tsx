@@ -22,6 +22,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
 
 export default function Home() {
   const [bannerText, setBannerText] = useState("");
@@ -34,9 +41,25 @@ export default function Home() {
   const [products, setProducts] = useState([])
   const [brands, setBrands] = useState([]);
   const [brandsLoading, setBrandsLoading] = useState(false);
-  const catFilter = () => {
+  const conditions = ["Used", "New", "Preowned", "Refurbished"];
+  const [brandFilterQuery, setBrandFilterQuery] = useState("");
+  const [catFilterQuery, setCatFilterQuery] = useState("");
+  const [conditionFilterQuery, setConditionFilterQuery] = useState("");
+  const categories = ["Laptop", "Desktop", "Gadget"]
+  let filterQuery = ""
+  const filter = async () => {
     // Filter logic goes here
+    if (brandFilterQuery != "") {
+      filterQuery += `${brandFilterQuery}`
+    }
+    if (conditionFilterQuery != "") {
+      filterQuery += `&${conditionFilterQuery}`
+    }
+    if (catFilterQuery != "") {
+      filterQuery += `&${catFilterQuery}`
+    }
     console.log("Filtering")
+    console.log(filterQuery)
   }
   const bannerFetch = async () => {
     try {
@@ -121,11 +144,28 @@ export default function Home() {
     console.log("Searching")
   }
   const [activeIndex, setActiveIndex] = useState(0);
-  const handleChangeBrand = (brandId: number, index: number) => {
+  const handleChangeBrand = async (brandId: number, index: number) => {
     setActiveIndex(index);
     // fetch products based on brandId
+    setBrandFilterQuery(`brand=${brandId}`);
     console.log("Brand filter: ", brandId)
+    console.log(brandFilterQuery);
+    await filter();
   }
+
+  const handleSelectCondition = async (condition: string) => {
+    setConditionFilterQuery(`condition=${condition}`);
+    console.log("Condition filter: ", condition)
+    console.log(conditionFilterQuery);
+    await filter();
+  };
+
+  const handleSelectCategory = async (category: string) => {
+    setCatFilterQuery(`category=${category}`);
+    console.log("Category filter: ", category)
+    console.log(catFilterQuery);
+    await filter();
+  };
   return (
     <div>
       <Banner bannerText={bannerText} loading={bannerLoading} />
@@ -195,8 +235,68 @@ export default function Home() {
         </div>
 
       </div>
-      <div className="my-4">
-        <PopularProduct products={products} loading={productsLoading} type="Products" />
+      <div className="my-4 grid md:grid-cols-4">
+        <div className="flex flex-col px-[30px] p-10">
+          <h1 className="text-xl font-bold">Filter By</h1>
+          <div className="my-4">
+            {/* filter by Condition */}
+            <h1 className="font-bold">Condition</h1>
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                name="radio-buttons-group"
+              >
+                {
+                  conditions.map((condition: string, index: number) => (
+                    <FormControlLabel
+                      value={condition}
+                      key={index}
+                      control={
+                        <Radio
+                          onChange={(e) => handleSelectCondition(e.target.value)}
+                          name={condition}
+                          color="primary"
+                        />
+                      }
+                      label={condition}
+                    />
+                  ))
+                }
+              </RadioGroup>
+            </FormControl>
+          </div>
+          <div className="">
+            {/* filter by Category */}
+            <h1 className="font-bold">Category</h1>
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                name="radio-buttons-group"
+              >
+                {
+                  categories.map((category: string, index: number) => (
+                    <FormControlLabel
+                      value={category}
+                      key={index}
+                      control={
+                        <Radio
+                          onChange={(e) => handleSelectCategory(e.target.value)}
+                          name={category}
+                          color="primary"
+                        />
+                      }
+                      label={category}
+                    />
+                  ))
+                }
+              </RadioGroup>
+            </FormControl>
+          </div>
+        </div>
+        <div className="cols-span-3">
+          <PopularProduct products={products} loading={productsLoading} type="Products" />
+
+        </div>
 
       </div>
       <div className="my-8 p-4">
