@@ -29,6 +29,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
+import { fetchTopDeals } from "@/api/top-deals";
 
 
 export default function Home() {
@@ -67,10 +68,26 @@ export default function Home() {
       const response = await filterProduct(filterQuery);
       if (response.status === "success") {
         setProductsLoading(false);
+        console.log(response);
         setProducts(response?.data);
       }
+      setProductsLoading(false);
     } catch (error) {
       setProductsLoading(false);
+      console.log(error);
+    }
+  }
+
+  const topDealsFetch = async () => {
+    try {
+      setTopDealsLoading(true);
+      const response = await fetchTopDeals();
+      if (response.status === "success") {
+        setTopDealsLoading(false);
+        setTopDeals(response?.data);
+      }
+    } catch (error) {
+      setTopDealsLoading(false);
       console.log(error);
     }
   }
@@ -138,6 +155,7 @@ export default function Home() {
     advertFetch();
     productsFetch();
     brandsFetch();
+    topDealsFetch();
   }, []);
   const handleSearch = async (value: string) => {
     console.log(value);
@@ -195,7 +213,7 @@ export default function Home() {
         </Link>
 
       </div>
-      <PopularProduct products={products} loading={productsLoading} type="Top Deals" />
+      <PopularProduct products={topDeals} loading={topDealsLoading} type="Top Deals" />
 
       <div className="mt-5">
         <h1 className="text-center font-bold text-2xl my-10">Brands</h1>
@@ -306,8 +324,11 @@ export default function Home() {
             </FormControl>
           </div>
         </div>
-        <div className="cols-span-3">
-          <PopularProduct products={products} loading={productsLoading} type="Products" />
+        <div className="col-span-3">
+          <div className="w-full">
+
+            <PopularProduct products={products} loading={productsLoading} type="Products" />
+          </div>
 
         </div>
 
