@@ -102,7 +102,7 @@ const ProductInfo = ({ product }: Props) => {
                         </div>
 
                         <div className='flex items-center justify-center mt-10'>
-                            <Link href={"https://api.whatsapp.com/send/?phone=2348183239589&text&type=phone_number&app_absent=0"}>
+                            <Link href={"https://wa.me/message/TOEIZPY2U4UWD1"}>
                                 <Button className="w-[200px] font-Poppins h-[60px] hover:bg-slate-700 shadow-md text-[16px] text-white bg-main" type="button">
                                     Order Now
                                 </Button>

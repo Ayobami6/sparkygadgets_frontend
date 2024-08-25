@@ -53,14 +53,14 @@ const PopularProduct = ({ type, products, loading }: Props) => {
                                         </CardHeader>
                                         <Link key={index} href={`/products/${item.id}`}>
                                             <CardContent>
-                                                <CardTitle>{item.name}</CardTitle>
+                                                <CardTitle className='text-xl'>{item.name}</CardTitle>
                                                 <CardDescription>
                                                     <div className='flex justify-start font-bold mt-4'>₦{item.price}</div>
 
                                                 </CardDescription>
                                             </CardContent>
                                         </Link>
-                                        <CardFooter>
+                                        {/* <CardFooter>
                                             <div className='flex justify-between hover:text-dark cursor-pointer gap-2 w-full text-center'>
                                                 <div className='p-2' onClick={() => handleCopyClick(String(`https://oyin-simple-eccommerce.vercel.app/products/${item.id}`))}>
                                                     <FaShareAlt />
@@ -72,7 +72,7 @@ const PopularProduct = ({ type, products, loading }: Props) => {
                                                 </Link>
 
                                             </div>
-                                        </CardFooter>
+                                        </CardFooter> */}
                                     </Card >
                                 ))
                             }
