@@ -78,6 +78,11 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    filter();
+
+  }, [catFilterQuery, brandFilterQuery, conditionFilterQuery])
+
   const topDealsFetch = async () => {
     try {
       setTopDealsLoading(true);
@@ -174,6 +179,12 @@ export default function Home() {
     }
     console.log("Searching")
   }
+
+  const clearFilters = () => {
+    setBrandFilterQuery("");
+    setCatFilterQuery("");
+    setConditionFilterQuery("");
+  }
   const [activeIndex, setActiveIndex] = useState(0);
   const handleChangeBrand = async (brandId: number, index: number) => {
     setActiveIndex(index);
@@ -181,21 +192,18 @@ export default function Home() {
     setBrandFilterQuery(`brand=${brandId}`);
     console.log("Brand filter: ", brandId)
     console.log(brandFilterQuery);
-    await filter();
   }
 
   const handleSelectCondition = async (condition: string) => {
     setConditionFilterQuery(`condition=${condition}`);
     console.log("Condition filter: ", condition)
     console.log(conditionFilterQuery);
-    await filter();
   };
 
   const handleSelectCategory = async (category: string) => {
     setCatFilterQuery(`category=${category}`);
     console.log("Category filter: ", category)
     console.log(catFilterQuery);
-    await filter();
   };
   return (
     <div>
@@ -269,6 +277,9 @@ export default function Home() {
       <div className="my-4 grid md:grid-cols-4">
         <div className="flex flex-col px-[30px] p-10">
           <h1 className="text-xl font-bold">Filter By</h1>
+          <div className="my-3">
+            <h3 onClick={clearFilters} className="text-sm hover:underline hover:text-submain cursor-pointer">Clear filter</h3>
+          </div>
           <div className="my-4">
             {/* filter by Condition */}
             <h1 className="font-bold">Condition</h1>
