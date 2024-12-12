@@ -12,6 +12,7 @@ const nextConfig = {
           "sparkygadgets.pythonanywhere.com",
         ],
      },
+    output: 'standalone',
 }
 
 export default nextConfig;
