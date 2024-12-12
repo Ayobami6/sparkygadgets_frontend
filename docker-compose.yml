@@ -11,6 +11,8 @@ services:
       - "3000:3000"
     command:
       "node server.js"
+    networks:
+      - app-network
   
   nginx:
     image: nginx:alpine
@@ -21,3 +23,10 @@ services:
       - "80:80"
     depends_on:
       - nextjs
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
